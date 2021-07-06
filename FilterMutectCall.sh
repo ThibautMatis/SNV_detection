@@ -8,12 +8,29 @@
 #
 # awk and cut for only keep PASS mutations and removes Normal column information
 
+Ref_genome = $1
+Tumor_bam = $2
+Normal_bam = $3
+Phred = $4
+Results = $5
+HRD_settings = $6
+AF_gnomad = $7
+Pon = $8
+Exac = $9
+threads = $10
+ALT_reads = $11
 
-./gatk FilterMutectCalls -V /data/VCF/Unfiltered/Pair2.vcf.gz \
--R /data/Reference/hg19.fa \
---contamination-table /data/gatk-copy/Tumor-table/AFN-1985.calculatecontamination.table \
---ob-priors /data/gatk-copy/Pair19-read-orientation-model.tar.gz \
---min-reads-per-strand 10 \
--O /data/Pair2.prefiltered_0%.vcf
-awk -F '\t' '{if($0 ~ /\#/) print; else if($7 == "PASS") print}' /data/Pair2.prefiltered_0%.vcf > /data/Pair2.filtered.vcf
-cut  --complement -f10 /data/VCF/Filtered_0%/Pair19.filtered.vcf >  /data/VCF/Filtered_0%/AFN-2214.filtered.vcf
+Normal_ID = basename "$Normal_bam" | sed 's/.bam//g'
+Tumor_ID = basename "$Tumor_bam" | sed 's/.bam//g'
+
+mkdir ${Results}/VCF_annot
+mkdir ${Results}/VCF_filtered
+
+./gatk FilterMutectCalls -V ${Results}/VCF_raw/${Tumor_ID}.vcf.gz \
+-R $Ref_genome \
+--contamination-table ${Results}/Contamination/${Tumor_ID}.calculatecontamination.table \
+--ob-priors ${Results}/ReadOrientationModel/${Tumor_ID}-read-orientation-model.tar.gz \
+--min-reads-per-strand $ALT_reads \
+-O ${Results}/VCF_annot/${Tumor_ID}.pair.annot.vcf
+awk -F '\t' '{if($0 ~ /\#/) print; else if($7 == "PASS") print}' /${Results}/VCF_annot/${Tumor_ID}.pair.annot.vcf > /${Results}/VCF_filtered/${Tumor_ID}.pair.filtered.vcf
+cut  --complement -f10 ${Results}/VCF_filtered/${Tumor_ID}.pair.filtered.vcf >  /${Results}/VCF_filtered/${Tumor_ID}.tumor.filtered.vcf
