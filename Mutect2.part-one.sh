@@ -21,19 +21,19 @@
 # Input [-I] : GetPileupSummaries.normal.table
 # output [-O] : contamination.tumor.table
 
-Ref_genome = $1
-Tumor_bam = $2
-Normal_bam = $3
-Phred = $4
-Results = $5
-HRD_settings = $6
-AF_gnomad = $7
-Pon = $8
-Exac = $9
-threads = $10
+Ref_genome=$1
+Tumor_bam=$2
+Normal_bam=$3
+Phred=$4
+Results=$5
+HRD_settings=$6
+AF_gnomad =$7
+Pon=$8
+Exac=$9
+threads=$10
 
-Normal_ID = basename "$Normal_bam" | sed 's/.bam//g'
-Tumor_ID = basename "$Tumor_bam" | sed 's/.bam//g'
+Normal_ID=basename "$Normal_bam" | sed 's/.bam//g'
+Tumor_ID=basename "$Tumor_bam" | sed 's/.bam//g'
 
 mkdir ${Results}/LearnReadOrientationModel
 mkdir ${Results}/ReadOrientationModel
