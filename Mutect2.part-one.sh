@@ -26,11 +26,10 @@ Tumor_bam=$2
 Normal_bam=$3
 Phred=$4
 Results=$5
-HRD_settings=$6
-AF_gnomad=$7
-Pon=$8
-Exac=$9
-threads=$10
+AF_gnomad=$6
+Pon=$7
+Exac=$8
+threads=$9
 
 Normal_ID=`basename $Normal_bam | sed 's/.bam//g'`
 Tumor_ID=`basename $Tumor_bam | sed 's/.bam//g'`
