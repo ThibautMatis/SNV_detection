@@ -27,7 +27,7 @@ Normal_bam=$3
 Phred=$4
 Results=$5
 HRD_settings=$6
-AF_gnomad =$7
+AF_gnomad=$7
 Pon=$8
 Exac=$9
 threads=$10
@@ -42,7 +42,7 @@ mkdir ${Results}/Tumor_table
 mkdir ${Results}/Contamination
 mkdir ${Results}/VCF_raw
 
-./gatk Mutect2 -R $Ref_genome \
+gatk Mutect2 -R $Ref_genome \
 -I $Tumor_bam \
 -I $Normal_bam \
 -normal $Normal_ID \
@@ -53,22 +53,22 @@ mkdir ${Results}/VCF_raw
 --native-pair-hmm-threads $threads \
 -O ${Results}/VCF_raw/${Tumor_ID}.vcf.gz
 #
-./gatk LearnReadOrientationModel -I ${Results}/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
+gatk LearnReadOrientationModel -I ${Results}/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
 -O ${Results}/ReadOrientationModel/${Tumor_ID}-read-orientation-model.tar.gz
 #
-./gatk GetPileupSummaries \
+gatk GetPileupSummaries \
 -I $Normal_bam \
 -V $Exac \
 -L $Exac \
 -O ${Results}/Normal_table/${Normal_ID}.getpileupsummaries.table
 #
-./gatk GetPileupSummaries \
+gatk GetPileupSummaries \
 -I $Tumor_bam \
 -V $Exac \
 -L $Exac \
 -O ${Results}/Tumor_table/${Tumor_ID}.getpileupsummaries.table
 #
-./gatk CalculateContamination \
+gatk CalculateContamination \
 -I ${Results}/Tumor_table/${Tumor_ID}.getpileupsummaries.table \
 -matched ${Results}/Normal_table/${Normal_ID}.getpileupsummaries.table \
 -O ${Results}/Contamination/${Tumor_ID}.calculatecontamination.table
