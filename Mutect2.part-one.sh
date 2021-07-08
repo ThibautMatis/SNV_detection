@@ -31,8 +31,8 @@ Pon=$7
 Exac=$8
 threads=$9
 
-Normal_ID=`basename $Normal_bam | sed 's/.bam//g'`
-Tumor_ID=`basename $Tumor_bam | sed 's/.bam//g'`
+Normal_ID=`basename $Normal_bam | sed 's/bwamem.bam//g'`
+Tumor_ID=`basename $Tumor_bam | sed 's/bwamem.bam//g'`
 
 mkdir ${Results}/LearnReadOrientationModel
 mkdir ${Results}/ReadOrientationModel
