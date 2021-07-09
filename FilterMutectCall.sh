@@ -8,14 +8,14 @@
 #
 # awk and cut for only keep PASS mutations and removes Normal column information
 
-Ref_genome = $1
-Tumor_bam = $2
-Normal_bam = $3
-Results = $5
-ALT_reads = $11
+Ref_genome=$1
+Tumor_bam=$2
+Normal_bam=$3
+Results=$4
+ALT_reads=$5
 
-Normal_ID = basename "$Normal_bam" | sed 's/.bam//g'
-Tumor_ID = basename "$Tumor_bam" | sed 's/.bam//g'
+Normal_ID = basename "$Normal_bam" | sed 's/.bwamem.bam//g'
+Tumor_ID = basename "$Tumor_bam" | sed 's/.bwamem.bam//g'
 
 mkdir ${Results}/VCF_annot
 mkdir ${Results}/VCF_filtered
