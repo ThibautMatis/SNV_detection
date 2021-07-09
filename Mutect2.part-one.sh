@@ -22,14 +22,15 @@
 # output [-O] : contamination.tumor.table
 
 Ref_genome=$1
-Tumor_bam=$2
-Normal_bam=$3
-Phred=$4
-Results=$5
-AF_gnomad=$6
-Pon=$7
-Exac=$8
-threads=$9
+Interval=$2
+Tumor_bam=$3
+Normal_bam=$4
+Phred=$5
+Results=$6
+AF_gnomad=$7
+Pon=$8
+Exac=$9
+threads=$
 
 Normal_ID=`basename $Normal_bam | sed 's/.bwamem.bam//g'`
 Tumor_ID=`basename $Tumor_bam | sed 's/.bwamem.bam//g'`
@@ -42,6 +43,7 @@ mkdir ${Results}/Contamination
 mkdir ${Results}/VCF_raw
 
 gatk Mutect2 -R $Ref_genome \
+-L $Interval \
 -I $Tumor_bam \
 -I $Normal_bam \
 -normal $Normal_ID \
