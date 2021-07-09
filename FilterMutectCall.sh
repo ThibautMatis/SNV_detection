@@ -20,7 +20,7 @@ Tumor_ID = basename "$Tumor_bam" | sed 's/.bwamem.bam//g'
 mkdir ${Results}/VCF_annot
 mkdir ${Results}/VCF_filtered
 
-./gatk FilterMutectCalls -V ${Results}/VCF_raw/${Tumor_ID}.vcf.gz \
+gatk FilterMutectCalls -V ${Results}/VCF_raw/${Tumor_ID}.vcf.gz \
 -R $Ref_genome \
 --contamination-table ${Results}/Contamination/${Tumor_ID}.calculatecontamination.table \
 --ob-priors ${Results}/ReadOrientationModel/${Tumor_ID}-read-orientation-model.tar.gz \
