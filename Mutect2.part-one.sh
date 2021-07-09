@@ -30,7 +30,7 @@ Results=$6
 AF_gnomad=$7
 Pon=$8
 Exac=$9
-threads=$
+threads=${10}
 
 Normal_ID=`basename $Normal_bam | sed 's/.bwamem.bam//g'`
 Tumor_ID=`basename $Tumor_bam | sed 's/.bwamem.bam//g'`
