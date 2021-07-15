@@ -21,6 +21,7 @@
 # Input [-I] : GetPileupSummaries.normal.table
 # output [-O] : contamination.tumor.table
 
+
 Ref_genome=$1
 Interval=$2
 Tumor_bam=$3
@@ -35,12 +36,12 @@ threads=${10}
 Normal_ID=`basename $Normal_bam | sed 's/.bwamem.bam//g'`
 Tumor_ID=`basename $Tumor_bam | sed 's/.bwamem.bam//g'`
 
-mkdir ${Results}/LearnReadOrientationModel
-mkdir ${Results}/ReadOrientationModel
-mkdir ${Results}/Normal_table
-mkdir ${Results}/Tumor_table
-mkdir ${Results}/Contamination
-mkdir ${Results}/VCF_raw
+mkdir $Results/LearnReadOrientationModel
+mkdir $Results/ReadOrientationModel
+mkdir $Results/Normal_table
+mkdir $Results/Tumor_table
+mkdir $Results/Contamination
+mkdir $Results/VCF_raw
 
 gatk Mutect2 -R $Ref_genome \
 -L $Interval \
@@ -73,3 +74,4 @@ gatk CalculateContamination \
 -I ${Results}/Tumor_table/${Tumor_ID}.getpileupsummaries.table \
 -matched ${Results}/Normal_table/${Normal_ID}.getpileupsummaries.table \
 -O ${Results}/Contamination/${Tumor_ID}.calculatecontamination.table
+
