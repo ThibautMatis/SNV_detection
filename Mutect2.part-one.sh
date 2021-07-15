@@ -21,13 +21,20 @@
 # Input [-I] : GetPileupSummaries.normal.table
 # output [-O] : contamination.tumor.table
 
-Tumor_bam=$1
-Normal_bam=$2
-Results=$3
-HRD_settings=$4
 
-Normal_ID=`basename "$Normal_bam" | sed 's/.bam//g'`
-Tumor_ID=`basename "$Tumor_bam" | sed 's/.bam//g'`
+Ref_genome=$1
+Interval=$2
+Tumor_bam=$3
+Normal_bam=$4
+Phred=$5
+Results=$6
+AF_gnomad=$7
+Pon=$8
+Exac=$9
+threads=${10}
+
+Normal_ID=`basename $Normal_bam | sed 's/.bwamem.bam//g'`
+Tumor_ID=`basename $Tumor_bam | sed 's/.bwamem.bam//g'`
 
 mkdir $Results/LearnReadOrientationModel
 mkdir $Results/ReadOrientationModel
@@ -36,33 +43,35 @@ mkdir $Results/Tumor_table
 mkdir $Results/Contamination
 mkdir $Results/VCF_raw
 
-./gatk Mutect2 -R /data/Reference/hg19.fa \
+gatk Mutect2 -R $Ref_genome \
+-L $Interval \
 -I $Tumor_bam \
 -I $Normal_bam \
 -normal $Normal_ID \
---min-base-quality-score 30 \
---germline-resource /data/gnomAD/af-only-gnomad.raw.sites.hg19.vcf.gz \
--pon /data/PON/PoN.vcf.gz \
---f1r2-tar-gz $Results/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
---native-pair-hmm-threads 2 \
--O $Results/VCF_raw/${Tumor_ID}.vcf.gz
+--min-base-quality-score $Phred \
+--germline-resource $AF_gnomad \
+-pon $Pon \
+--f1r2-tar-gz ${Results}/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
+--native-pair-hmm-threads $threads \
+-O ${Results}/VCF_raw/${Tumor_ID}.vcf.gz
 #
-./gatk LearnReadOrientationModel -I $Results/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
--O $Results/ReadOrientationModel/${Tumor_ID}-read-orientation-model.tar.gz
+gatk LearnReadOrientationModel -I ${Results}/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
+-O ${Results}/ReadOrientationModel/${Tumor_ID}-read-orientation-model.tar.gz
 #
-./gatk GetPileupSummaries \
+gatk GetPileupSummaries \
 -I $Normal_bam \
--V /data/gnomAD/small_exac_common_3_hg19.vcf \
--L /data/gnomAD/small_exac_common_3_hg19.vcf \
--O $Results/Normal_table/${Normal_ID}.getpileupsummaries.table
+-V $Exac \
+-L $Exac \
+-O ${Results}/Normal_table/${Normal_ID}.getpileupsummaries.table
 #
-./gatk GetPileupSummaries \
+gatk GetPileupSummaries \
 -I $Tumor_bam \
--V /data/gnomAD/small_exac_common_3_hg19.vcf \
--L /data/gnomAD/small_exac_common_3_hg19.vcf \
--O $Results/Tumor_table/${Tumor_ID}.getpileupsummaries.table
+-V $Exac \
+-L $Exac \
+-O ${Results}/Tumor_table/${Tumor_ID}.getpileupsummaries.table
 #
-./gatk CalculateContamination \
--I $Results/Tumor_table/${Tumor_ID}.getpileupsummaries.table \
--matched $Results/Normal_table/${Normal_ID}.getpileupsummaries.table \
--O $Results/Contamination/${Tumor_ID}.calculatecontamination.table
+gatk CalculateContamination \
+-I ${Results}/Tumor_table/${Tumor_ID}.getpileupsummaries.table \
+-matched ${Results}/Normal_table/${Normal_ID}.getpileupsummaries.table \
+-O ${Results}/Contamination/${Tumor_ID}.calculatecontamination.table
+
