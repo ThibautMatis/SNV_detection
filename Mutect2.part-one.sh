@@ -27,7 +27,7 @@ Interval=$2
 Tumor_bam=$3
 Normal_bam=$4
 Phred=$5
-Max-reads-per-alignment-start=$6
+Max_reads_per_alignment_start=$6
 Results=$7
 AF_gnomad=$8
 Pon=$9
@@ -50,7 +50,7 @@ gatk Mutect2 -R $Ref_genome \
 -I $Normal_bam \
 -normal $Normal_ID \
 --min-base-quality-score $Phred \
---max-reads-per-alignment-start $Max-reads-per-alignment-start \
+--max-reads-per-alignment-start $Max_reads_per_alignment_start \
 --germline-resource $AF_gnomad \
 -pon $Pon \
 --f1r2-tar-gz ${Results}/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
