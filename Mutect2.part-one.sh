@@ -27,11 +27,12 @@ Interval=$2
 Tumor_bam=$3
 Normal_bam=$4
 Phred=$5
-Results=$6
-AF_gnomad=$7
-Pon=$8
-Exac=$9
-threads=${10}
+Max-reads-per-alignment-start=$6
+Results=$7
+AF_gnomad=$8
+Pon=$9
+Exac=${10}
+threads=${11}
 
 Normal_ID=`basename $Normal_bam | sed 's/.bwamem.bam//g'`
 Tumor_ID=`basename $Tumor_bam | sed 's/.bwamem.bam//g'`
@@ -49,6 +50,7 @@ gatk Mutect2 -R $Ref_genome \
 -I $Normal_bam \
 -normal $Normal_ID \
 --min-base-quality-score $Phred \
+--max-reads-per-alignment-start $Max-reads-per-alignment-start \
 --germline-resource $AF_gnomad \
 -pon $Pon \
 --f1r2-tar-gz ${Results}/LearnReadOrientationModel/${Tumor_ID}-f1r2.tar.gz \
